@@ -8,7 +8,7 @@ Sistema SCADA (Control nivel tanque agua) con pyQt y Pinguino 18F2550
 
 
 Bibliografía
-============
+------------
 
 pyuic4 -x the_ui_file_name.ui -o the_python_file_name.py
 
