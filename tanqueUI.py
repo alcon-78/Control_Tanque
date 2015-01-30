@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'tanque.ui'
 #
-# Created: Fri Jan 30 00:28:57 2015
+# Created: Fri Jan 30 13:24:29 2015
 #      by: PyQt4 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -67,18 +67,22 @@ class Ui_Form(object):
         self.progressBar_Nivel.setTextDirection(QtGui.QProgressBar.BottomToTop)
         self.progressBar_Nivel.setObjectName(_fromUtf8("progressBar_Nivel"))
         self.groupBox = QtGui.QGroupBox(Form)
-        self.groupBox.setGeometry(QtCore.QRect(160, 50, 199, 159))
+        self.groupBox.setGeometry(QtCore.QRect(160, 50, 201, 141))
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
         self.gridLayoutWidget = QtGui.QWidget(self.groupBox)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(9, 19, 181, 121))
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(9, 19, 187, 113))
         self.gridLayoutWidget.setObjectName(_fromUtf8("gridLayoutWidget"))
         self.gridLayout = QtGui.QGridLayout(self.gridLayoutWidget)
-        self.gridLayout.setMargin(0)
+        self.gridLayout.setContentsMargins(-1, 0, 0, 0)
+        self.gridLayout.setHorizontalSpacing(0)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.lcdMaximo = QtGui.QLCDNumber(self.gridLayoutWidget)
-        self.lcdMaximo.setProperty("intValue", 90)
-        self.lcdMaximo.setObjectName(_fromUtf8("lcdMaximo"))
-        self.gridLayout.addWidget(self.lcdMaximo, 1, 0, 1, 1)
+        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem, 0, 1, 1, 1)
+        self.sliderMax = QtGui.QSlider(self.gridLayoutWidget)
+        self.sliderMax.setProperty("value", 90)
+        self.sliderMax.setOrientation(QtCore.Qt.Horizontal)
+        self.sliderMax.setObjectName(_fromUtf8("sliderMax"))
+        self.gridLayout.addWidget(self.sliderMax, 2, 0, 1, 1)
         self.lcdMinimo = QtGui.QLCDNumber(self.gridLayoutWidget)
         self.lcdMinimo.setProperty("intValue", 15)
         self.lcdMinimo.setObjectName(_fromUtf8("lcdMinimo"))
@@ -94,21 +98,18 @@ class Ui_Form(object):
         self.label = QtGui.QLabel(self.gridLayoutWidget)
         self.label.setObjectName(_fromUtf8("label"))
         self.gridLayout.addWidget(self.label, 0, 2, 1, 1)
-        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem, 4, 0, 1, 1)
-        spacerItem1 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem1, 4, 2, 1, 1)
         self.bt_confirmar = QtGui.QPushButton(self.gridLayoutWidget)
         self.bt_confirmar.setCheckable(True)
         self.bt_confirmar.setObjectName(_fromUtf8("bt_confirmar"))
         self.gridLayout.addWidget(self.bt_confirmar, 3, 2, 1, 1)
-        spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem2, 0, 1, 1, 1)
-        self.sliderMax = QtGui.QSlider(self.gridLayoutWidget)
-        self.sliderMax.setProperty("value", 90)
-        self.sliderMax.setOrientation(QtCore.Qt.Horizontal)
-        self.sliderMax.setObjectName(_fromUtf8("sliderMax"))
-        self.gridLayout.addWidget(self.sliderMax, 2, 0, 1, 1)
+        self.lcdMaximo = QtGui.QLCDNumber(self.gridLayoutWidget)
+        self.lcdMaximo.setProperty("intValue", 90)
+        self.lcdMaximo.setObjectName(_fromUtf8("lcdMaximo"))
+        self.gridLayout.addWidget(self.lcdMaximo, 1, 0, 1, 1)
+        self.label_7 = QtGui.QLabel(self.gridLayoutWidget)
+        self.label_7.setText(_fromUtf8(""))
+        self.label_7.setObjectName(_fromUtf8("label_7"))
+        self.gridLayout.addWidget(self.label_7, 3, 0, 1, 1)
         self.pushButton_2 = QtGui.QPushButton(Form)
         self.pushButton_2.setGeometry(QtCore.QRect(20, 530, 90, 40))
         font = QtGui.QFont()
@@ -173,7 +174,9 @@ class Ui_Form(object):
         self.bt_llenado.setStyleSheet(_fromUtf8("border: 1px solid black;\n"
 "text-align: left;\n"
 "border-bottom-left-radius: 25px;\n"
+"border-bottom-right-radius: 10px;\n"
 "border-top-left-radius: 25px;\n"
+"border-top-right-radius: 10px;\n"
 "background-color: #D3D3D3;"))
         self.bt_llenado.setCheckable(True)
         self.bt_llenado.setChecked(False)
@@ -213,10 +216,10 @@ class Ui_Form(object):
         self.bt_vaciado.setStyleSheet(_fromUtf8("border: 1px solid black;\n"
 "text-align: left;\n"
 "border-bottom-left-radius: 25px;\n"
+"border-bottom-right-radius: 10px;\n"
 "border-top-left-radius: 25px;\n"
-"background-color: #D3D3D3;\n"
-"\n"
-""))
+"border-top-right-radius: 10px;\n"
+"background-color: #D3D3D3;"))
         self.bt_vaciado.setCheckable(True)
         self.bt_vaciado.setObjectName(_fromUtf8("bt_vaciado"))
         self.label_12 = QtGui.QLabel(self.widget_2)
@@ -251,14 +254,21 @@ class Ui_Form(object):
         self.nivel_min.setFrameShadow(QtGui.QFrame.Raised)
         self.nivel_min.setObjectName(_fromUtf8("nivel_min"))
         self.textObs = QtGui.QTextBrowser(Form)
-        self.textObs.setGeometry(QtCore.QRect(130, 480, 221, 90))
+        self.textObs.setGeometry(QtCore.QRect(130, 491, 221, 61))
         self.textObs.setObjectName(_fromUtf8("textObs"))
+        self.pushButton = QtGui.QPushButton(Form)
+        self.pushButton.setGeometry(QtCore.QRect(160, 550, 151, 23))
+        self.pushButton.setObjectName(_fromUtf8("pushButton"))
+        self.label_6 = QtGui.QLabel(Form)
+        self.label_6.setGeometry(QtCore.QRect(140, 470, 81, 16))
+        self.label_6.setObjectName(_fromUtf8("label_6"))
 
         self.retranslateUi(Form)
         QtCore.QObject.connect(self.sliderMax, QtCore.SIGNAL(_fromUtf8("valueChanged(int)")), self.lcdMaximo.display)
         QtCore.QObject.connect(self.sliderMin, QtCore.SIGNAL(_fromUtf8("valueChanged(int)")), self.lcdMinimo.display)
         QtCore.QObject.connect(self.progressBar_Nivel, QtCore.SIGNAL(_fromUtf8("valueChanged(int)")), self.lcdNumber_1.display)
         QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), Form.close)
+        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.textObs.clear)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -279,6 +289,8 @@ class Ui_Form(object):
         self.label_9.setText(_translate("Form", "BOMBA LLENADO", None))
         self.bt_vaciado.setText(_translate("Form", "   ON", None))
         self.label_12.setText(_translate("Form", "VALVULA DE VACIADO", None))
+        self.pushButton.setText(_translate("Form", "Limpiar cuadro", None))
+        self.label_6.setText(_translate("Form", "Observaciones:", None))
 
 
 if __name__ == "__main__":

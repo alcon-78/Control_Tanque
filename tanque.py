@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Mar 27 18:28:11 2014
-<< Pinguino by Marin Purgar (marin.purgar@gmail.com)                         >>
+Interface SCADA con Pinguino 18F2550 y pyQt - Cristian O. Viola 2014/2015
+Se utiliza codigo obtenido de distintas fuentes
+<< Pinguino by Marin Purgar (marin.purgar@gmail.com)>>
 @author: fAnDrEs (fabian.salamanca@openmailbox.org)
-Modificada por Cristian O. Viola 2014/2015
 """
 
 import sys
@@ -39,22 +39,21 @@ class Principal(QtGui.QFrame):
         # Conectamos la senal de click del boton (bt_vaciado) con el metodo
         self.connect(self.ui.bt_vaciado, QtCore.SIGNAL("toggled()"),
             self.on_bt_vaciado_toggled)
-
         # Configurar nivel maximo y minimo del tanque
         self.connect(self.ui.bt_confirmar, QtCore.SIGNAL("toggled()"),
             self.on_bt_confirmar_toggled)
 
     def inicio(self):
-        # Conexcion pinguino
+        # Conexion pinguino
         self.pinguino = Pinguino()
         if (self.pinguino.pinguinoOpen() == None):
-            self.ui.textObs.append('El dispositivo no esta disponible. Revise la conexion Pinguino <--> PC')
+            self.ui.textObs.append('Dispositivo no disponible. Revise conexion')
             # Cerrar aplicacion de manera correcta.
             self.pinguino.pinguinoClose()
         else:
-            # Activamos en la GUI el elemento y desactivamos boton conectar.
             self.ui.textObs.clear()
             self.ui.textObs.append('Conexion exitosa!')
+            # Desactivamos boton conectar.
             self.ui.boton_conectar.setEnabled(False)
             self.ui.bt_llenado.setEnabled(True)
             self.ui.bt_llenado.setCheckable(True)
@@ -75,32 +74,46 @@ class Principal(QtGui.QFrame):
             size.height()) / 2)
 
 #-------------------------------------------------------------------------------
+    # Metodo ON/OFF boton llenado tanque
     @QtCore.pyqtSlot()
-    def on_bt_llenado_pressed(self):  # si presiona el boton,
+    def on_bt_llenado_pressed(self):
+        self.INTERVAL = 100
         self.ui.id_llenado.setStyleSheet("background-color: white;")
         self.ui.bt_llenado.setText("  ON")
+        self.actualizar('4')  # Desactiva pin 11 de la placa
+        self.ui.textObs.append('pin 11 OFF')
+
 
     def on_bt_llenado_toggled(self, checked):
         if checked:
             self.rowOverride = True
             self.ui.bt_llenado.setText("  OFF")
             self.ui.id_llenado.setStyleSheet("background-color: green;")
+            self.INTERVAL = 100
+            self.actualizar('3')  # Activa pin 11 de la placa
+            self.ui.textObs.append('pin 11 ON')
         elif not checked:
             self.rowOverride = False
 #-------------------------------------------------------------------------------
+    # Metodo ON/OFF boton vaciado tanque
     @QtCore.pyqtSlot()
     def on_bt_vaciado_pressed(self):  # si presiona el boton,
         self.ui.id_vaciado.setStyleSheet("background-color: white;")
         self.ui.bt_vaciado.setText("  ON")
+        self.actualizar('6')  # Desactiva pin 12 de la placa
+        self.ui.textObs.append('pin 12 OFF')
 
     def on_bt_vaciado_toggled(self, checked):
         if checked:
             self.rowOverride = True
             self.ui.bt_vaciado.setText("  OFF")
             self.ui.id_vaciado.setStyleSheet("background-color: green;")
+            self.actualizar('5')  # Activa pin 12 de la placa
+            self.ui.textObs.append('pin 12 ON')
         elif not checked:
             self.rowOverride = False
 #-------------------------------------------------------------------------------
+    # Metodo Configurar/Confirmar niveles maximos y minimos del tanque
     @QtCore.pyqtSlot()
     def on_bt_confirmar_pressed(self):  # si presiona el boton,
         self.ui.bt_confirmar.setText("Confirmar")
@@ -121,6 +134,7 @@ class Principal(QtGui.QFrame):
             self.rowOverride = False
 
 #-------------------------------------------------------------------------------
+     # Metodo nivel para sensar nivel de tanque en la placa (pin 14)
     def nivel(self):
         self.INTERVAL = 100  # intervalo (tiempo) de lectura
         deg = unichr(176).encode("utf-8")
@@ -130,7 +144,7 @@ class Principal(QtGui.QFrame):
         try:
             for i in self.pinguino.pinguinoRead(5, self.INTERVAL):
                 if i > 47 and i < 58:    # ANSI 0,1,2,...,9
-                    #print "valor actual",i # Debug
+                    print "valor actual",i # Debug
                     self.myString += chr(i)
 
         except usb.USBError as err:
@@ -142,15 +156,27 @@ class Principal(QtGui.QFrame):
             # Asigna valor nivel tanque
             self.ui.progressBar_Nivel.setValue(self.nivel)
             if (self.nivel >= self.ui.sliderMax.value()):
-                self.ui.nivel_min.setStyleSheet("QFrame { background-color: #00FF00}")  # VERDE
-                self.ui.nivel_max.setStyleSheet("QFrame { background-color: #FF0000}")  # ROJO
+                self.ui.nivel_min.setStyleSheet("QFrame { background-color: green}")
+                self.ui.nivel_max.setStyleSheet("QFrame { background-color: red}")
             elif (self.nivel <= self.ui.sliderMin.value()):
-                self.ui.nivel_min.setStyleSheet("QFrame { background-color: #FF0000}")  # ROJO
-                self.ui.nivel_max.setStyleSheet("QFrame { background-color: #00FF00}")  # VERDE
+                self.ui.nivel_min.setStyleSheet("QFrame { background-color: red}")
+                self.ui.nivel_max.setStyleSheet("QFrame { background-color: green}")
             else:
-                self.ui.nivel_max.setStyleSheet("QFrame { background-color: #00FF00}")  # VERDE
-                self.ui.nivel_min.setStyleSheet("QFrame { background-color: #00FF00}")  # VERDE
+                self.ui.nivel_max.setStyleSheet("QFrame { background-color: green}")
+                self.ui.nivel_min.setStyleSheet("QFrame { background-color: green}")
 
+#-------------------------------------------------------------------------------
+    # Metodo para encender led indicadores en la placa
+    def actualizar(self, boton_onOff = None):
+        self.boton_onOff = boton_onOff
+        self.INTERVAL = 100  # Intervalo tiempo de lectura
+        try:
+            if self.boton_onOff != None:
+                self.pinguino.pinguinoWrite(self.boton_onOff, self.INTERVAL)
+                self.ui.textObs.append('ingreso en metodo actualizar()')
+        except AtributeError as err:
+            pass
+#-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
 # Pinguino Class by Marin Purgar (marin.purgar@gmail.com)
@@ -221,7 +247,7 @@ def main():
     ventana.show()
     # Se ejecuta y expera a que termine la aplicación
     sys.exit(app.exec_())
-    # Cierra la conexcion con el pinguino Correctamente
+    # Cierra la conexion con el pinguino Correctamente
     Pinguino.pinguinoClose()
 
 if __name__ == "__main__":
