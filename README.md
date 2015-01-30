@@ -1,7 +1,12 @@
 Control_Tanque
 ==============
 
-Control nivel tanque agua con Pinguino PIC
+Sistema SCADA (Control nivel tanque agua) con pyQt y Pinguino 18F2550 
+
+![Alt text](https://raw.githubusercontent.com/alcon-78/Control_Tanque/master/Captura_1.png "Captura de la Ui")
+
+
+
 
 pyuic4 -x the_ui_file_name.ui -o the_python_file_name.py
 
